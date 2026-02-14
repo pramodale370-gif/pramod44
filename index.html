@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Proposal 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #f8c8d8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  color: #5c2a3c;
+  text-align: center;
+  position: relative;
+}
+
+/* Sparkle Heart */
+.sparkle-heart {
+  display: inline-block;
+  position: relative;
+  animation: pulseHeart 1.5s infinite alternate;
+}
+
+.sparkle-heart::after {
+  content: "✨";
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  font-size: 1.2rem;
+  animation: sparkle 1s infinite alternate;
+}
+
+@keyframes pulseHeart {
+  from { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+@keyframes sparkle {
+  from { opacity: 0.5; transform: rotate(0deg); }
+  to { opacity: 1; transform: rotate(20deg); }
+}
+
+/* Floating hearts */
+.small-heart {
+  position: absolute;
+  color: #ff6b81;
+  font-size: 14px;
+  animation: floatUp 6s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+
+h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 4rem;
+  margin: 0;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 1.3rem;
+}
+
+/* Buttons */
+.button-container {
+  margin-top: 30px;
+}
+
+button {
+  padding: 12px 35px;
+  border: none;
+  border-radius: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#yes-button {
+  background: #ff4b69;
+  color: white;
+  margin-right: 20px;
+}
+
+#yes-button:hover {
+  transform: scale(1.1);
+}
+
+#no-button {
+  background: #f1a7b8;
+  color: white;
+  position: absolute;
+}
+
+/* Letter Card */
+.letter-card {
+  background: white;
+  padding: 30px;
+  width: 320px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fireworks */
+.firework-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: translate(0,0); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>
+  Dear Rebika 
+  <span class="sparkle-heart">❤️</span>
+</h1>
+
+<div class="subtitle">Will you be my Valentine? 💖</div>
+
+<div class="button-container">
+  <button id="yes-button">Yes 💕</button>
+  <button id="no-button">No 💔</button>
+</div>
+
+<audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" loop></audio>
+
+<script>
+const yesBtn = document.getElementById("yes-button");
+const noBtn = document.getElementById("no-button");
+
+/* Floating background hearts */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.classList.add("small-heart");
+  heart.innerHTML = "💗";
+  heart.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 600);
+
+/* NO Button Emotional Escape Mode */
+const noTexts = [
+  "Are you sure? 🤔",
+  "Really sure? 😟",
+  "Think again? 😢",
+  "Please? 🥺",
+  "Do not do this... 😭",
+  "I'll be sad 😔",
+  "Pretty please? 🌹"
+];
+
+let noIndex = 0;
+
+function moveNoButton() {
+  const buttonWidth = noBtn.offsetWidth;
+  const buttonHeight = noBtn.offsetHeight;
+
+  const maxX = window.innerWidth - buttonWidth;
+  const maxY = window.innerHeight - buttonHeight;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+
+  noBtn.textContent = noTexts[noIndex];
+  noIndex = (noIndex + 1) % noTexts.length;
+}
+
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("click", function(e) {
+  e.preventDefault();
+  moveNoButton();
+});
+
+/* YES Click */
+yesBtn.addEventListener("click", () => {
+
+  document.querySelector(".button-container").style.display = "none";
+  document.querySelector(".subtitle").style.display = "none";
+  document.querySelector("h1").innerHTML =
+    "I knew you'd say yes, Rebika! 💖";
+
+  spawnFireworks(6);
+  showLetter();
+
+  const music = document.getElementById("bg-music");
+  music.volume = 0;
+  music.play().catch(() => {});
+
+  let fade = setInterval(() => {
+    if (music.volume < 0.8) {
+      music.volume += 0.05;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+});
+
+/* Fireworks */
+function spawnFireworks(count) {
+  const colors = ["#ff4b69","#ffd700","#ffffff","#ff9a9e"];
+
+  for (let i = 0; i < count; i++) {
+    const centerX = Math.random() * window.innerWidth;
+    const centerY = Math.random() * window.innerHeight / 2;
+
+    for (let j = 0; j < 25; j++) {
+      const particle = document.createElement("div");
+      particle.classList.add("firework-particle");
+
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = 80 + Math.random() * 60;
+
+      const x = Math.cos(angle) * distance + "px";
+      const y = Math.sin(angle) * distance + "px";
+
+      particle.style.left = centerX + "px";
+      particle.style.top = centerY + "px";
+      particle.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      particle.style.setProperty("--x", x);
+      particle.style.setProperty("--y", y);
+
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 1000);
+    }
+  }
+}
+
+/* Letter */
+function showLetter() {
+  setTimeout(() => {
+    const card = document.createElement("div");
+    card.classList.add("letter-card");
+    card.innerHTML = `
+      <h2 style="font-family:'Great Vibes';">A Letter for You</h2>
+      <p>
+      From the moment I saw you, my heart knew. 💕<br><br>
+      Your smile lights up my darkest days.<br>
+      I want to laugh with you, dream with you,<br>
+      and grow with you.<br><br>
+      Be mine — today and always. 
+      Dharai maya xa god bless you.
+      Sapana ma jasto chai na gara
+      laaa! gift khai mero.<br><br>Happy Valentine's Day, my love 🌹
+      </p>
+    `;
+    document.body.appendChild(card);
+  }, 800);
+}
+</script>
+
+</body>
+</html>
